@@ -1,0 +1,114 @@
+<mat-horizontal-stepper linear #stepper>
+    <mat-step [stepControl]="basic">
+        <form class="step" autocomplete="off" [formGroup]="basic">
+            <ng-template matStepLabel>Informacje podstawowe</ng-template>
+            <div class="avatar-container">
+                <img ngxGravatar [email]="'example@mail.com'" size="150">
+            </div>
+            <mat-form-field>
+                <input formControlName="dayOfBirth" matInput [matDatepicker]="picker"
+                    placeholder="Data urodzenia dziecka">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <div>
+                <mat-form-field>
+                    <input formControlName="weight" type="number" matInput placeholder="Waga dziecka (kg)">
+                </mat-form-field>
+            </div>
+            <div>
+                <div class="checkbox-container">
+                    <mat-checkbox formControlName="awaiting">Dziecko jeszcze się nie narodziło</mat-checkbox>
+                </div>
+                <button mat-icon-button matStepperNext>
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="additional">
+        <form class="step" [formGroup]="additional">
+            <ng-template matStepLabel>Informacje dodatkowe</ng-template>
+            <div class="avatar-container">
+                <img ngxGravatar [email]="'example@mail.com'" size="150">
+            </div>
+            <div>
+                <mat-form-field>
+                    <input formControlName="interval" matInput type="number"
+                        placeholder="Co ile dni planujesz robić pranie?" required>
+                </mat-form-field>
+            </div>
+            <mat-form-field>
+                <mat-label>Sposób suszenia</mat-label>
+                <mat-select formControlName="dryingMethod">
+                    <mat-option *ngFor="let method of dryingMethods" [value]="method.value">
+                        {{method.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div>
+                <mat-form-field *ngIf="additional.get('dryingMethod').value == 'traditional'">
+                    <input formControlName="dryingTime" matInput type="number"
+                        placeholder="Przewidywany maksymalny czas schnięcia (w dniach)">
+                </mat-form-field>
+            </div>
+            <div>
+                <button mat-icon-button matStepperPrevious>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <button mat-icon-button matStepperNext>
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step *ngIf="!basic.get('awaiting').value" [stepControl]="current">
+        <form class="step" [formGroup]="current">
+            <ng-template matStepLabel>Aktualne zużycie</ng-template>
+            <div class="avatar-container">
+                <img ngxGravatar [email]="'example@mail.com'" size="150">
+            </div>
+            <div>
+                <mat-form-field>
+                    <input formControlName="dailyUsage" matInput type="number"
+                        placeholder="Ile pieluch zużywasz w ciągu dnia?" required>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field>
+                    <input formControlName="nightlyUsage" matInput type="number"
+                        placeholder="Ile pieluch zużywasz w przez noc?" required>
+                </mat-form-field>
+            </div>
+            <div>
+                <button mat-icon-button matStepperPrevious>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <div *ngIf="confirmed">
+                    {{next(stepper)}}
+                </div>
+                <button *ngIf="!confirmed" mat-raised-button mat-icon-button (click)="openDialog()">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Wynik</ng-template>
+        <section>
+            <div class="avatar-container">
+                <img ngxGravatar [email]="'example@mail.com'" size="150">
+            </div>
+            <h3>Sugerowana liczba zmian:</h3>
+            <div class="result">{{calculate()}}</div>
+            <h3>Sugerowana liczba zmian nocnych:</h3>
+            <div class="result">{{calculateNight()}}</div>
+            <div>
+                <button mat-icon-button matStepperPrevious>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>
+        </section>
+    </mat-step>
+</mat-horizontal-stepper>
+<footer>Anna Czermińska &copy; 2019</footer>

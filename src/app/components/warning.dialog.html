@@ -1,0 +1,16 @@
+<div id="content">
+    <h1 mat-dialog-title>Czy dobrze Cię rozumiemy?</h1>
+    <mat-divider></mat-divider>
+    <div mat-dialog-content>
+        <mat-list role="list">
+            <mat-list-item role="listitem">W ciągu doby zużywasz {{data.dailyUsage + data.nightlyUsage}} pieluchy
+            </mat-list-item>
+            <mat-list-item role="listitem">W ciągu dnia zużywasz {{data.dailyUsage}} pieluchy</mat-list-item>
+            <mat-list-item role="listitem">W nocy zużywasz {{data.nightlyUsage}} pieluchy</mat-list-item>
+        </mat-list>
+    </div>
+</div>
+<div id="button-container" mat-dialog-actions>
+    <button mat-button (click)="Reject()">Popraw</button>
+    <button mat-button [mat-dialog-close]="data.hasSucceded" cdkFocusInitial>Potwierdź</button>
+</div>
