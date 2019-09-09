@@ -47,16 +47,18 @@
                 </mat-select>
             </mat-form-field>
             <div>
-                <mat-form-field *ngIf="additional.get('dryingMethod').value == 'traditional'">
-                    <input formControlName="dryingTime" matInput type="number"
-                        placeholder="Przewidywany maksymalny czas schnięcia (w dniach)">
+                <mat-form-field *ngIf="additional.get('dryingMethod').value === 'traditional'">
+                    <input matInput formControlName="dryingTime" type="number"
+                        placeholder="Przewidywany maksymalny czas schnięcia (w dniach)" required>
                 </mat-form-field>
             </div>
             <div>
                 <button mat-icon-button matStepperPrevious>
                     <mat-icon>arrow_back</mat-icon>
                 </button>
-                <button mat-icon-button matStepperNext>
+                <button
+                    *ngIf="additional.get('dryingMethod').value === 'dryer' || (additional.get('dryingMethod').value === 'traditional' && additional.get('dryingTime').value > 0)"
+                    mat-icon-button matStepperNext>
                     <mat-icon>arrow_forward</mat-icon>
                 </button>
             </div>
@@ -84,10 +86,12 @@
                 <button mat-icon-button matStepperPrevious>
                     <mat-icon>arrow_back</mat-icon>
                 </button>
-                <div *ngIf="confirmed">
+                <div *ngIf="confirmed && current.get('dailyUsage').value > 0 && current.get('nightlyUsage').value > 0">
                     {{next(stepper)}}
                 </div>
-                <button *ngIf="!confirmed" mat-raised-button mat-icon-button (click)="openDialog()">
+                <button
+                    *ngIf="!confirmed && current.get('dailyUsage').value > 0 && current.get('nightlyUsage').value > 0"
+                    mat-raised-button mat-icon-button (click)="openDialog()">
                     <mat-icon>arrow_forward</mat-icon>
                 </button>
             </div>
